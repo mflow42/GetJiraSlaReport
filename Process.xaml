@@ -1,0 +1,838 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="ProcessTransaction" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:njl="clr-namespace:Newtonsoft.Json.Linq;assembly=Newtonsoft.Json" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_TransactionItem" Type="InArgument(ui:QueueItem)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="io_SystemError" Type="InOutArgument(s:Exception)" />
+    <x:Property Name="in_LogsProcessedTicketsDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_EmployeesWorkHoursDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_HolidaysList" Type="InArgument(scg:List(s:DateTime))" />
+    <x:Property Name="in_LogsSLAClosingDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_LogsSLAReactionDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="io_BusinessRuleException" Type="InOutArgument(ui:BusinessRuleException)" />
+    <x:Property Name="in_TestMain" Type="InArgument(x:Boolean)" />
+    <x:Property Name="in_TransactionNumber" Type="InArgument(x:Int32)" />
+    <x:Property Name="in_QueueDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_JiraCredentials" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+  </x:Members>
+  <this:ProcessTransaction.in_LogsProcessedTicketsDT>
+    <InArgument x:TypeArguments="sd:DataTable" />
+  </this:ProcessTransaction.in_LogsProcessedTicketsDT>
+  <this:ProcessTransaction.in_EmployeesWorkHoursDT>
+    <InArgument x:TypeArguments="sd:DataTable" />
+  </this:ProcessTransaction.in_EmployeesWorkHoursDT>
+  <this:ProcessTransaction.in_HolidaysList>
+    <InArgument x:TypeArguments="scg:List(s:DateTime)" />
+  </this:ProcessTransaction.in_HolidaysList>
+  <this:ProcessTransaction.in_LogsSLAClosingDT>
+    <InArgument x:TypeArguments="sd:DataTable" />
+  </this:ProcessTransaction.in_LogsSLAClosingDT>
+  <this:ProcessTransaction.in_LogsSLAReactionDT>
+    <InArgument x:TypeArguments="sd:DataTable" />
+  </this:ProcessTransaction.in_LogsSLAReactionDT>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1069,9866</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ProcessTransaction_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>System.Windows</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>Newtonsoft.Json</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>System.Net</x:String>
+      <x:String>System.Globalization</x:String>
+      <x:String>System.Security</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <sap:WorkflowViewStateService.ViewState>
+    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+      <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+      <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+    </scg:Dictionary>
+  </sap:WorkflowViewStateService.ViewState>
+  <Sequence sap2010:Annotation.AnnotationText="Description: In this file all other process specific files will be invoked. If an application exception occurs, the current transaction can be retried. If a BRE is thrown, the transaction will be skipped. Can be a flowchart or sequence. " DisplayName="Process ticket changelog" sap:VirtualizedContainerService.HintSize="1029,9786" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Int32" Name="closingPeriod" />
+      <Variable x:TypeArguments="x:Int32" Name="reactionPeriod" />
+      <Variable x:TypeArguments="x:Boolean" Name="isProcessed" />
+      <Variable x:TypeArguments="scg:Dictionary(x:String, x:String)" Name="ticketData" />
+      <Variable x:TypeArguments="x:String" Name="slaClosingChangeHistory" />
+      <Variable x:TypeArguments="x:String" Name="slaReactionChangeHistory" />
+      <Variable x:TypeArguments="x:Int32" Name="closingTemp" />
+      <Variable x:TypeArguments="njl:JObject" Name="jsonParsed" />
+      <Variable x:TypeArguments="x:String" Name="json" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="1007,91" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Warn" Message="[String.Format(&quot;Processing ticket {0}...&quot;, in_TransactionItem.SpecificContent(&quot;Ticket&quot;).ToString())]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:LogMessage>
+    <If Condition="[String.IsNullOrEmpty(in_Config(&quot;AssetName&quot;).ToString)]" DisplayName="If there are no Jira asset then take login and password from Config.xlsx" sap:VirtualizedContainerService.HintSize="1007,208" sap2010:WorkflowViewState.IdRef="If_52">
+      <If.Then>
+        <ui:HttpClient Body="{x:Null}" ClientCertificate="{x:Null}" ClientCertificatePassword="{x:Null}" ConsumerKey="{x:Null}" ConsumerSecret="{x:Null}" ContinueOnError="{x:Null}" OAuth1Token="{x:Null}" OAuth1TokenSecret="{x:Null}" OAuth2Token="{x:Null}" ResourcePath="{x:Null}" ResponseHeaders="{x:Null}" StatusCode="{x:Null}" AcceptFormat="JSON" BodyFormat="application/json" DisplayName="HTTP Request ticket field 'updated'" EndPoint="[String.Format(in_Config(&quot;CompanyJiraURLWithAPIGetUpdatedFiled&quot;).Tostring, in_TransactionItem.SpecificContent(&quot;Ticket&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="HttpClient_5" Method="GET" Password="[in_JiraCredentials(&quot;JiraPassword&quot;).ToString]" Result="[json]" TimeoutMS="600000" Username="[in_JiraCredentials(&quot;JiraLogin&quot;).ToString]">
+          <ui:HttpClient.Attachments>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.Attachments>
+          <ui:HttpClient.Cookies>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.Cookies>
+          <ui:HttpClient.Headers>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.Headers>
+          <ui:HttpClient.Parameters>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.Parameters>
+          <ui:HttpClient.UrlSegments>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.UrlSegments>
+        </ui:HttpClient>
+      </If.Then>
+      <If.Else>
+        <ui:HttpClient Body="{x:Null}" ClientCertificate="{x:Null}" ClientCertificatePassword="{x:Null}" ConsumerKey="{x:Null}" ConsumerSecret="{x:Null}" ContinueOnError="{x:Null}" OAuth1Token="{x:Null}" OAuth1TokenSecret="{x:Null}" OAuth2Token="{x:Null}" ResourcePath="{x:Null}" ResponseHeaders="{x:Null}" StatusCode="{x:Null}" AcceptFormat="JSON" BodyFormat="application/xml" DisplayName="HTTP Request ticket field 'updated'" EndPoint="[String.Format(in_Config(&quot;CompanyJiraURLWithAPIGetUpdatedFiled&quot;).Tostring, in_TransactionItem.SpecificContent(&quot;Ticket&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="HttpClient_4" Method="GET" Password="[new System.Net.NetworkCredential(String.Empty, CType(in_JiraCredentials(&quot;SecurePassword&quot;), System.Security.SecureString)).Password]" Result="[json]" TimeoutMS="600000" Username="[in_JiraCredentials(&quot;JiraLogin&quot;).ToString]">
+          <ui:HttpClient.Attachments>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.Attachments>
+          <ui:HttpClient.Cookies>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.Cookies>
+          <ui:HttpClient.Headers>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.Headers>
+          <ui:HttpClient.Parameters>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.Parameters>
+          <ui:HttpClient.UrlSegments>
+            <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+          </ui:HttpClient.UrlSegments>
+        </ui:HttpClient>
+      </If.Else>
+    </If>
+    <ui:DeserializeJson x:TypeArguments="njl:JObject" DisplayName="Deserialize json ticket field 'updated'" sap:VirtualizedContainerService.HintSize="1007,60" sap2010:WorkflowViewState.IdRef="DeserializeJson`1_4" JsonObject="[jsonParsed]" JsonString="[json]" />
+    <If Condition="[in_LogsProcessedTicketsDT.AsEnumerable().Where(Function(r) r(&quot;TicketID&quot;).ToString() = in_TransactionItem.SpecificContent(&quot;Ticket&quot;).ToString() AndAlso CDate(r(&quot;LastChange&quot;)) = CDate(jsonParsed(&quot;fields&quot;)(&quot;updated&quot;).ToString()) ).Count() &gt;= 1]" DisplayName="If ticket been processed according to logs" sap:VirtualizedContainerService.HintSize="1007,9141" sap2010:WorkflowViewState.IdRef="If_47">
+      <If.Then>
+        <ui:LogMessage DisplayName="Log Message has been already processed according to logs" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Warn" Message="[String.Format(&quot;Ticket {0} has been already processed according to logs...&quot;, in_TransactionItem.SpecificContent(&quot;Ticket&quot;))]" />
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Sequence for else" sap:VirtualizedContainerService.HintSize="668,8993" sap2010:WorkflowViewState.IdRef="Sequence_191">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <Sequence DisplayName="Get ticket changelog" sap:VirtualizedContainerService.HintSize="646,432" sap2010:WorkflowViewState.IdRef="Sequence_165">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <If Condition="[String.IsNullOrEmpty(in_Config(&quot;AssetName&quot;).ToString)]" DisplayName="If there are no Jira asset then take login and password from Config.xlsx" sap:VirtualizedContainerService.HintSize="464,208" sap2010:WorkflowViewState.IdRef="If_53">
+              <If.Then>
+                <ui:HttpClient Body="{x:Null}" ClientCertificate="{x:Null}" ClientCertificatePassword="{x:Null}" ConsumerKey="{x:Null}" ConsumerSecret="{x:Null}" ContinueOnError="{x:Null}" OAuth1Token="{x:Null}" OAuth1TokenSecret="{x:Null}" OAuth2Token="{x:Null}" ResourcePath="{x:Null}" ResponseHeaders="{x:Null}" StatusCode="{x:Null}" AcceptFormat="JSON" BodyFormat="application/json" DisplayName="HTTP Request ticket field 'updated'" EndPoint="[String.Format(in_Config(&quot;CompanyJiraURLWithAPIGetUpdatedFiled&quot;).Tostring, in_TransactionItem.SpecificContent(&quot;Ticket&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="HttpClient_6" Method="GET" Password="[in_JiraCredentials(&quot;JiraPassword&quot;).ToString]" Result="[json]" TimeoutMS="600000" Username="[in_JiraCredentials(&quot;JiraLogin&quot;).ToString]">
+                  <ui:HttpClient.Attachments>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.Attachments>
+                  <ui:HttpClient.Cookies>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.Cookies>
+                  <ui:HttpClient.Headers>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.Headers>
+                  <ui:HttpClient.Parameters>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.Parameters>
+                  <ui:HttpClient.UrlSegments>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.UrlSegments>
+                </ui:HttpClient>
+              </If.Then>
+              <If.Else>
+                <ui:HttpClient Body="{x:Null}" ClientCertificate="{x:Null}" ClientCertificatePassword="{x:Null}" ConsumerKey="{x:Null}" ConsumerSecret="{x:Null}" ContinueOnError="{x:Null}" OAuth1Token="{x:Null}" OAuth1TokenSecret="{x:Null}" OAuth2Token="{x:Null}" ResourcePath="{x:Null}" ResponseHeaders="{x:Null}" StatusCode="{x:Null}" AcceptFormat="JSON" BodyFormat="application/json" DisplayName="HTTP Request all change history" EndPoint="[String.Format(in_Config(&quot;CompanyJiraURLWithAPIIssue&quot;).ToString, in_TransactionItem.SpecificContent(&quot;Ticket&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="HttpClient_3" Method="GET" Password="[New System.Net.NetworkCredential(String.Empty, CType(in_JiraCredentials(&quot;SecurePassword&quot;), System.Security.SecureString)).Password]" Result="[json]" TimeoutMS="60000" Username="[in_JiraCredentials(&quot;JiraLogin&quot;).ToString]">
+                  <ui:HttpClient.Attachments>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.Attachments>
+                  <ui:HttpClient.Cookies>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.Cookies>
+                  <ui:HttpClient.Headers>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.Headers>
+                  <ui:HttpClient.Parameters>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.Parameters>
+                  <ui:HttpClient.UrlSegments>
+                    <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                  </ui:HttpClient.UrlSegments>
+                </ui:HttpClient>
+              </If.Else>
+            </If>
+            <ui:DeserializeJson x:TypeArguments="njl:JObject" DisplayName="Deserialize json all change history" sap:VirtualizedContainerService.HintSize="464,60" sap2010:WorkflowViewState.IdRef="DeserializeJson`1_3" JsonObject="[jsonParsed]" JsonString="[json]" />
+          </Sequence>
+          <Sequence DisplayName="Assign and clean variables" sap:VirtualizedContainerService.HintSize="646,1384" sap2010:WorkflowViewState.IdRef="Sequence_166">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Assign DisplayName="Assign Ticket dictionary" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_158">
+              <Assign.To>
+                <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)">[ticketData]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="scg:Dictionary(x:String, x:String)">[new Dictionary(of String, String)]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign TicketID" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_159">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("TicketID")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[jsonParsed("key").ToString]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign TicketLink" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_160">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("TicketLink")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[String.Format("https://jira.osmp.ru/browse/{0}", ticketData("TicketID"))]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign CreatedDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_192">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("CreatedDate")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[jsonParsed("fields")("created").ToString]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign OpenDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_161">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("OpenDate")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[jsonParsed("fields")("created").ToString]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign FromDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_209">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("FromDate")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[jsonParsed("fields")("created").ToString]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign LastChange" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_162">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("LastChange")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[jsonParsed("fields")("updated").ToString]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign Assignee" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_163">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("Assignee")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[jsonParsed("fields")("assignee")("name").ToString]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign ReactionDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_164">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("InProgressDate")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[String.Empty]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign WaitingDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_165">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("WaitingDate")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[String.Empty]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign ClosedDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_166">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[ticketData("ClosedDate")]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[String.Empty]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign ReactionPeriod" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_167">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:Int32">[reactionPeriod]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:Int32">0</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign ClosingPeriod" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_168">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:Int32">[closingPeriod]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:Int32">0</InArgument>
+              </Assign.Value>
+            </Assign>
+          </Sequence>
+          <Sequence DisplayName="For details in email" sap:VirtualizedContainerService.HintSize="646,284" sap2010:WorkflowViewState.IdRef="Sequence_181">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Assign DisplayName="Assign SLAReactionChangeHistory" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_191">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[slaReactionChangeHistory]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[String.Format("(Open) {0} ", CDate(ticketData("OpenDate")).ToString("dd.MM.yyyy HH:mm:ss"))]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Assign DisplayName="Assign SLAClosingChangeHistory" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_189">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:String">[slaClosingChangeHistory]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:String">[slaReactionChangeHistory]</InArgument>
+              </Assign.Value>
+            </Assign>
+          </Sequence>
+          <Sequence DisplayName="Sequence for iterating ticket histories" sap:VirtualizedContainerService.HintSize="646,6649" sap2010:WorkflowViewState.IdRef="Sequence_189">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:ForEach x:TypeArguments="njl:JObject" CurrentIndex="{x:Null}" DisplayName="For Each history in jsonResult(&quot;changelog&quot;)(&quot;histories&quot;)" sap:VirtualizedContainerService.HintSize="624,5954" sap2010:WorkflowViewState.IdRef="ForEach`1_6" Values="[jsonParsed(&quot;changelog&quot;)(&quot;histories&quot;)]">
+              <ui:ForEach.Body>
+                <ActivityAction x:TypeArguments="njl:JObject">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="njl:JObject" Name="history" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Body for histories" sap:VirtualizedContainerService.HintSize="608,5820" sap2010:WorkflowViewState.IdRef="Sequence_177">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign DisplayName="Assign HistoryDate" sap:VirtualizedContainerService.HintSize="586,60" sap2010:WorkflowViewState.IdRef="Assign_171">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[ticketData("HistoryDate")]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[history("created").ToString()]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <ui:ForEach x:TypeArguments="njl:JObject" CurrentIndex="{x:Null}" DisplayName="For Each item in history(&quot;items&quot;)" sap:VirtualizedContainerService.HintSize="586,5596" sap2010:WorkflowViewState.IdRef="ForEach`1_5" Values="[history(&quot;items&quot;)]">
+                      <ui:ForEach.Body>
+                        <ActivityAction x:TypeArguments="njl:JObject">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="njl:JObject" Name="item" />
+                          </ActivityAction.Argument>
+                          <Sequence DisplayName="Body for items" sap:VirtualizedContainerService.HintSize="570,5462" sap2010:WorkflowViewState.IdRef="Sequence_176">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <Assign DisplayName="Assign Field" sap:VirtualizedContainerService.HintSize="548,60" sap2010:WorkflowViewState.IdRef="Assign_172">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:String">[ticketData("Field")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:String">[item("field").ToString]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign NewValueFromString" sap:VirtualizedContainerService.HintSize="548,60" sap2010:WorkflowViewState.IdRef="Assign_173">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:String">[ticketData("NewValueFromString")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:String">[item("fromString").ToString]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign NewValueTo" sap:VirtualizedContainerService.HintSize="548,60" sap2010:WorkflowViewState.IdRef="Assign_174">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:String">[ticketData("NewValueTo")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:String">[item("to").ToString]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Assign DisplayName="Assign NewValueToString" sap:VirtualizedContainerService.HintSize="548,60" sap2010:WorkflowViewState.IdRef="Assign_175">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:String">[ticketData("NewValueToString")]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:String">[item("toString").ToString]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <Switch x:TypeArguments="x:String" DisplayName="Switch value of Field" Expression="[ticketData(&quot;Field&quot;)]" sap:VirtualizedContainerService.HintSize="548,4938" sap2010:WorkflowViewState.IdRef="Switch`1_4">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <Sequence x:Key="assignee" sap:VirtualizedContainerService.HintSize="264,284" sap2010:WorkflowViewState.IdRef="Sequence_170">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <Assign DisplayName="Assign AssignDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_176">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[ticketData("AssignDate")]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">[ticketData("HistoryDate")]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <Assign DisplayName="Assign Assignee" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_177">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[ticketData("Assignee")]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">[ticketData("NewValueTo")]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                              </Sequence>
+                              <Switch x:TypeArguments="x:String" x:Key="status" DisplayName="Switch value of NewValueToString" Expression="[ticketData(&quot;NewValueToString&quot;)]" sap:VirtualizedContainerService.HintSize="528,4298" sap2010:WorkflowViewState.IdRef="Switch`1_3">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <Sequence x:Key="In Progress" DisplayName="Sequence for In Progress" sap:VirtualizedContainerService.HintSize="486,1359" sap2010:WorkflowViewState.IdRef="Sequence_171">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <Assign DisplayName="Assign ReactionDate" sap:VirtualizedContainerService.HintSize="464,60" sap2010:WorkflowViewState.IdRef="Assign_178">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[ticketData("InProgressDate")]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">[ticketData("HistoryDate")]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <Assign DisplayName="Assign IsProcessed SLAReaction when In Progress" sap:VirtualizedContainerService.HintSize="464,60" sap2010:WorkflowViewState.IdRef="Assign_200">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:Boolean">[isProcessed]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:Boolean">[If(in_LogsSLAReactionDT.AsEnumerable().Where(Function(r) r("TicketID").ToString() = ticketData("TicketID") AndAlso CDate(r("ReactionDate")) = CDate(ticketData("HistoryDate"))).Count() = 1, True, False)]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <If Condition="[NOT isProcessed AND ticketData(&quot;NewValueFromString&quot;) &lt;&gt; &quot;Waiting&quot;]" DisplayName="If IsProcessed and NOT from Waiting (for SLA Reaction)" sap:VirtualizedContainerService.HintSize="464,235" sap2010:WorkflowViewState.IdRef="If_45">
+                                    <If.Then>
+                                      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessTicketChange workflow" sap:VirtualizedContainerService.HintSize="314,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="ProcessLayer/ProcessTicketChange.xaml">
+                                        <ui:InvokeWorkflowFile.Arguments>
+                                          <InArgument x:TypeArguments="sd:DataTable" x:Key="in_EmployeesWorkHoursDT">[in_EmployeesWorkHoursDT]</InArgument>
+                                          <InArgument x:TypeArguments="scg:List(s:DateTime)" x:Key="in_HolidaysList">[in_HolidaysList]</InArgument>
+                                          <InArgument x:TypeArguments="s:DateTime" x:Key="in_StartDate">[CDate(ticketData("FromDate"))]</InArgument>
+                                          <InArgument x:TypeArguments="s:DateTime" x:Key="in_EndDate">[CDate(ticketData("InProgressDate"))]</InArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="in_MailSubject">[in_Config("SLAReactionMailSubject").ToString]</InArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="in_MailBody">[in_Config("SLAReactionMailBody").ToString]</InArgument>
+                                          <InArgument x:TypeArguments="x:Int32" x:Key="in_SLAPeriod">[CInt(in_Config("SLAReactionPeriod"))]</InArgument>
+                                          <InOutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="in_TicketData">[ticketData]</InOutArgument>
+                                          <InArgument x:TypeArguments="x:Int32" x:Key="in_Period">[reactionPeriod]</InArgument>
+                                          <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                                          <InOutArgument x:TypeArguments="s:Exception" x:Key="io_SystemError">[io_SystemError]</InOutArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="in_SLAChangeHistory">[slaReactionChangeHistory]</InArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="in_LogsSLASheet">[in_Config("LogsSLAReactionSheet").ToString]</InArgument>
+                                          <InOutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="io_BusinessRuleException">[io_BusinessRuleException]</InOutArgument>
+                                          <InArgument x:TypeArguments="x:Boolean" x:Key="in_TestMain">[in_TestMain]</InArgument>
+                                          <InArgument x:TypeArguments="x:Boolean" x:Key="in_SendMails">[CBool(in_Config("SendMails"))]</InArgument>
+                                        </ui:InvokeWorkflowFile.Arguments>
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                      </ui:InvokeWorkflowFile>
+                                    </If.Then>
+                                  </If>
+                                  <If Condition="[NOT isProcessed AND ticketData(&quot;NewValueFromString&quot;) = &quot;Waiting&quot;]" DisplayName="If NOT IsProcessed and IS from Waiting (for SLA Closing)" sap:VirtualizedContainerService.HintSize="464,436" sap2010:WorkflowViewState.IdRef="If_49">
+                                    <If.Then>
+                                      <Sequence sap:VirtualizedContainerService.HintSize="264,288" sap2010:WorkflowViewState.IdRef="Sequence_194">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <Assign DisplayName="Assign FromDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_211">
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="x:String">[ticketData("FromDate")]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="x:String">[ticketData("HistoryDate")]</InArgument>
+                                          </Assign.Value>
+                                        </Assign>
+                                        <Assign DisplayName="Assign SLAClosingChangeHistory" sap:VirtualizedContainerService.HintSize="242,64" sap2010:WorkflowViewState.IdRef="Assign_207">
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="x:String">[slaClosingChangeHistory]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="x:String" xml:space="preserve">[slaClosingChangeHistory + String.Format("({0}) {1} ", 
+ticketData("NewValueToString"),
+CDate(ticketData("FromDate")).ToString("dd.MM.yyyy HH:mm:ss", New System.Globalization.CultureInfo("ru-RU")))]</InArgument>
+                                          </Assign.Value>
+                                        </Assign>
+                                      </Sequence>
+                                    </If.Then>
+                                  </If>
+                                  <Sequence DisplayName="Clean variables" sap:VirtualizedContainerService.HintSize="464,284" sap2010:WorkflowViewState.IdRef="Sequence_186">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <Assign DisplayName="Assign SLAReactionChangeHistoryForEmail" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_195">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:String">[slaReactionChangeHistory]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:String">[String.Empty]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                    <Assign DisplayName="Clean ReactionPeriod" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_180">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:Int32">[reactionPeriod]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                  </Sequence>
+                                </Sequence>
+                                <Sequence x:Key="Closed" DisplayName="Sequence for Closed" sap:VirtualizedContainerService.HintSize="508,1682" sap2010:WorkflowViewState.IdRef="Sequence_174">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <Assign DisplayName="Assign ClosedDate" sap:VirtualizedContainerService.HintSize="486,60" sap2010:WorkflowViewState.IdRef="Assign_181">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[ticketData("ClosedDate")]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">[ticketData("HistoryDate")]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <Sequence DisplayName="For SLAReaction" sap:VirtualizedContainerService.HintSize="486,659" sap2010:WorkflowViewState.IdRef="Sequence_187">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <Assign DisplayName="Assign IsProcessed SLAReaction when Closed" sap:VirtualizedContainerService.HintSize="464,60" sap2010:WorkflowViewState.IdRef="Assign_201">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:Boolean">[isProcessed]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:Boolean">[If(in_LogsSLAReactionDT.AsEnumerable().Where(Function(r) r("TicketID").ToString() = ticketData("TicketID") AndAlso CDate(r("ReactionDate")) = CDate(ticketData("HistoryDate"))).Count() = 1, True, False)]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                    <If Condition="[NOT isProcessed AND ( ticketData(&quot;NewValueFromString&quot;) = &quot;Open&quot; OR ticketData(&quot;NewValueFromString&quot;) = &quot;Reopened&quot; )]" DisplayName="If IsProcessed OR TicketData(&quot;NewValueFromString&quot;) = &quot;In Progress&quot;" sap:VirtualizedContainerService.HintSize="464,235" sap2010:WorkflowViewState.IdRef="If_44">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <If.Then>
+                                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessTicketChange workflow" sap:VirtualizedContainerService.HintSize="314,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="ProcessLayer/ProcessTicketChange.xaml">
+                                          <ui:InvokeWorkflowFile.Arguments>
+                                            <InArgument x:TypeArguments="sd:DataTable" x:Key="in_EmployeesWorkHoursDT">[in_EmployeesWorkHoursDT]</InArgument>
+                                            <InArgument x:TypeArguments="scg:List(s:DateTime)" x:Key="in_HolidaysList">[in_HolidaysList]</InArgument>
+                                            <InArgument x:TypeArguments="s:DateTime" x:Key="in_StartDate">[CDate(ticketData("FromDate"))]</InArgument>
+                                            <InArgument x:TypeArguments="s:DateTime" x:Key="in_EndDate">[CDate(ticketData("ClosedDate"))]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_MailSubject">[in_Config("SLAReactionMailSubject").ToString]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_MailBody">[in_Config("SLAReactionMailBody").ToString]</InArgument>
+                                            <InArgument x:TypeArguments="x:Int32" x:Key="in_SLAPeriod">[CInt(in_Config("SLAReactionPeriod"))]</InArgument>
+                                            <InOutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="in_TicketData">[ticketData]</InOutArgument>
+                                            <InArgument x:TypeArguments="x:Int32" x:Key="in_Period">[reactionPeriod]</InArgument>
+                                            <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                                            <InOutArgument x:TypeArguments="s:Exception" x:Key="io_SystemError">[io_SystemError]</InOutArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_SLAChangeHistory">[slaReactionChangeHistory]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_LogsSLASheet">[in_Config("LogsSLAReactionSheet").ToString]</InArgument>
+                                            <InOutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="io_BusinessRuleException">[io_BusinessRuleException]</InOutArgument>
+                                            <InArgument x:TypeArguments="x:Boolean" x:Key="in_TestMain">[in_TestMain]</InArgument>
+                                            <InArgument x:TypeArguments="x:Boolean" x:Key="in_SendMails">[CBool(in_Config("SendMails"))]</InArgument>
+                                          </ui:InvokeWorkflowFile.Arguments>
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                        </ui:InvokeWorkflowFile>
+                                      </If.Then>
+                                    </If>
+                                    <Assign DisplayName="Clean ReactionPeriod" sap:VirtualizedContainerService.HintSize="464,60" sap2010:WorkflowViewState.IdRef="Assign_203">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:Int32">[reactionPeriod]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                    <Assign DisplayName="Assign SLAReactionChangeHistoryForEmail" sap:VirtualizedContainerService.HintSize="464,60" sap2010:WorkflowViewState.IdRef="Assign_204">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:String">[slaReactionChangeHistory]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:String">[String.Empty]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                  </Sequence>
+                                  <Sequence DisplayName="For SLAClosing" sap:VirtualizedContainerService.HintSize="486,659" sap2010:WorkflowViewState.IdRef="Sequence_188">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <Assign DisplayName="Assign IsProcessed SLAClosing when Closed" sap:VirtualizedContainerService.HintSize="464,60" sap2010:WorkflowViewState.IdRef="Assign_202">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:Boolean">[isProcessed]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:Boolean">[If(in_LogsSLAClosingDT.AsEnumerable().Where(Function(r) r("TicketID").ToString() = ticketData("TicketID") AndAlso CDate(r("ClosedDate")) = CDate(ticketData("HistoryDate"))).Count() = 1, True, False)]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                    <If Condition="[NOT isProcessed]" DisplayName="If NOT IsProcessed AND NOT from Waiting" sap:VirtualizedContainerService.HintSize="464,235" sap2010:WorkflowViewState.IdRef="If_50">
+                                      <If.Then>
+                                        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessTicketChange workflow" sap:VirtualizedContainerService.HintSize="314,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_11" UnSafe="False" WorkflowFileName="ProcessLayer/ProcessTicketChange.xaml">
+                                          <ui:InvokeWorkflowFile.Arguments>
+                                            <InArgument x:TypeArguments="sd:DataTable" x:Key="in_EmployeesWorkHoursDT">[in_EmployeesWorkHoursDT]</InArgument>
+                                            <InArgument x:TypeArguments="scg:List(s:DateTime)" x:Key="in_HolidaysList">[in_HolidaysList]</InArgument>
+                                            <InArgument x:TypeArguments="s:DateTime" x:Key="in_StartDate">[CDate(ticketData("FromDate"))]</InArgument>
+                                            <InArgument x:TypeArguments="s:DateTime" x:Key="in_EndDate">[CDate(ticketData("ClosedDate"))]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_MailSubject">[in_Config("SLAClosingMailSubject").ToString]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_MailBody">[in_Config("SLAClosingMailBody").ToString]</InArgument>
+                                            <InArgument x:TypeArguments="x:Int32" x:Key="in_SLAPeriod">[CInt(in_Config("SLAClosingPeriod"))]</InArgument>
+                                            <InOutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="in_TicketData">[ticketData]</InOutArgument>
+                                            <InArgument x:TypeArguments="x:Int32" x:Key="in_Period">[closingPeriod]</InArgument>
+                                            <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[in_Config]</InArgument>
+                                            <InOutArgument x:TypeArguments="s:Exception" x:Key="io_SystemError">[io_SystemError]</InOutArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_SLAChangeHistory">[slaClosingChangeHistory]</InArgument>
+                                            <InArgument x:TypeArguments="x:String" x:Key="in_LogsSLASheet">[in_Config("LogsSLAClosingSheet").ToString]</InArgument>
+                                            <InOutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="io_BusinessRuleException">[io_BusinessRuleException]</InOutArgument>
+                                            <InArgument x:TypeArguments="x:Boolean" x:Key="in_TestMain">[in_TestMain]</InArgument>
+                                            <InArgument x:TypeArguments="x:Boolean" x:Key="in_SendMails">[CBool(in_Config("SendMails"))]</InArgument>
+                                          </ui:InvokeWorkflowFile.Arguments>
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                        </ui:InvokeWorkflowFile>
+                                      </If.Then>
+                                    </If>
+                                    <Assign DisplayName="Clean ReactionPeriod" sap:VirtualizedContainerService.HintSize="464,60" sap2010:WorkflowViewState.IdRef="Assign_194">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:Int32">[closingPeriod]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                    <Assign DisplayName="Assign SLAClosingChangeHistoryForEmail" sap:VirtualizedContainerService.HintSize="464,60" sap2010:WorkflowViewState.IdRef="Assign_197">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:String">[slaClosingChangeHistory]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:String">[String.Empty]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                  </Sequence>
+                                  <Assign DisplayName="Assign FromDate" sap:VirtualizedContainerService.HintSize="486,60" sap2010:WorkflowViewState.IdRef="Assign_213">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[ticketData("FromDate")]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">[ticketData("HistoryDate")]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                </Sequence>
+                                <Sequence x:Key="Waiting" sap:VirtualizedContainerService.HintSize="336,273" sap2010:WorkflowViewState.IdRef="Sequence_196">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessTicketFreeze workflow" sap:VirtualizedContainerService.HintSize="314,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_13" UnSafe="False" WorkflowFileName="ProcessLayer/ProcessTicketFreeze.xaml">
+                                    <ui:InvokeWorkflowFile.Arguments>
+                                      <InArgument x:TypeArguments="sd:DataTable" x:Key="in_EmployeesWorkHoursDT">[in_EmployeesWorkHoursDT]</InArgument>
+                                      <InArgument x:TypeArguments="scg:List(s:DateTime)" x:Key="in_HolidaysList">[in_HolidaysList]</InArgument>
+                                      <OutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="io_BusinessRuleException">[io_BusinessRuleException]</OutArgument>
+                                      <InOutArgument x:TypeArguments="x:Int32" x:Key="io_ClosingPeriod">[closingPeriod]</InOutArgument>
+                                      <InOutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="io_TicketData">[ticketData]</InOutArgument>
+                                      <InOutArgument x:TypeArguments="x:String" x:Key="io_SlaClosingChangeHistory">[slaClosingChangeHistory]</InOutArgument>
+                                      <InOutArgument x:TypeArguments="x:Int32" x:Key="io_ClosingTemp">[closingTemp]</InOutArgument>
+                                    </ui:InvokeWorkflowFile.Arguments>
+                                  </ui:InvokeWorkflowFile>
+                                  <ui:Continue sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Continue_5" />
+                                </Sequence>
+                                <Sequence x:Key="Reopened" DisplayName="Sequence for Reopoened" sap:VirtualizedContainerService.HintSize="264,492" sap2010:WorkflowViewState.IdRef="Sequence_183">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <Assign DisplayName="Assign OpenDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_188">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[ticketData("OpenDate")]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">[ticketData("HistoryDate")]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <Assign DisplayName="Assign FromDate" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_215">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[ticketData("FromDate")]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">[ticketData("HistoryDate")]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <Assign DisplayName="Assign SLAReactionChangeHistory" sap:VirtualizedContainerService.HintSize="242,64" sap2010:WorkflowViewState.IdRef="Assign_205">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[slaReactionChangeHistory]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String" xml:space="preserve">[slaReactionChangeHistory + String.Format("({0}) {1} ", 
+ticketData("NewValueToString"),
+CDate(ticketData("OpenDate")).ToString("dd.MM.yyyy HH:mm:ss"))]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                  <Assign DisplayName="Assign SLAClosingChangeHistory" sap:VirtualizedContainerService.HintSize="242,64" sap2010:WorkflowViewState.IdRef="Assign_199">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[slaClosingChangeHistory]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String" xml:space="preserve">[slaClosingChangeHistory + String.Format("({0}) {1} ", 
+ticketData("NewValueToString"),
+CDate(ticketData("OpenDate")).ToString("dd.MM.yyyy HH:mm:ss"))]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                </Sequence>
+                              </Switch>
+                            </Switch>
+                          </Sequence>
+                        </ActivityAction>
+                      </ui:ForEach.Body>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:ForEach>
+                  </Sequence>
+                </ActivityAction>
+              </ui:ForEach.Body>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:ForEach>
+            <Sequence DisplayName="Add log about processed ticket" sap:VirtualizedContainerService.HintSize="624,531" sap2010:WorkflowViewState.IdRef="Sequence_178">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="sd:DataTable" Name="CurrentTicketDT" />
+              </Sequence.Variables>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:BuildDataTable DataTable="[CurrentTicketDT]" DisplayName="Build Data Table" sap:VirtualizedContainerService.HintSize="314,59" sap2010:WorkflowViewState.IdRef="BuildDataTable_5" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;              &lt;xs:sequence&gt;&#xA;                &lt;xs:element name=&quot;DateProcessed&quot; type=&quot;xs:dateTime&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;TicketID&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;LastChange&quot; type=&quot;xs:dateTime&quot; minOccurs=&quot;0&quot; /&gt;&#xA;              &lt;/xs:sequence&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;" />
+              <ui:AddDataRow DataRow="{x:Null}" ArrayRow="[{Now, ticketData(&quot;TicketID&quot;), CDate(ticketData(&quot;LastChange&quot;))}]" DataTable="[CurrentTicketDT]" DisplayName="Add Data Row to Temp Logs DT" sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="AddDataRow_16" />
+              <ui:AppendRange DataTable="[CurrentTicketDT]" DisplayName="Append Range &quot;Data\Logs.xlsx&quot;" sap:VirtualizedContainerService.HintSize="314,115" sap2010:WorkflowViewState.IdRef="AppendRange_10" SheetName="[in_Config(&quot;LogsProcessedTicketsSheet&quot;).ToString]" WorkbookPath="[Path.Combine(in_Config(&quot;InputFolder&quot;).ToString, in_Config(&quot;LogsFileName&quot;).ToString)]" />
+              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Warn" Message="[String.Format(&quot;Processed ticket {0}...&quot;, in_TransactionItem.SpecificContent(&quot;Ticket&quot;).ToString())]" />
+            </Sequence>
+          </Sequence>
+        </Sequence>
+      </If.Else>
+    </If>
+  </Sequence>
+</Activity>

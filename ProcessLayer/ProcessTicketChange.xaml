@@ -1,0 +1,329 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="ProcessTicketChange" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:w="clr-namespace:WorkSpace;assembly=GetMinutesBetweenDates" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_EmployeesWorkHoursDT" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_HolidaysList" Type="InArgument(scg:List(s:DateTime))" />
+    <x:Property Name="in_StartDate" Type="InArgument(s:DateTime)" />
+    <x:Property Name="in_EndDate" Type="InArgument(s:DateTime)" />
+    <x:Property Name="in_MailSubject" Type="InArgument(x:String)" />
+    <x:Property Name="in_MailBody" Type="InArgument(x:String)" />
+    <x:Property Name="in_SLAPeriod" Type="InArgument(x:Int32)" />
+    <x:Property Name="in_TicketData" Type="InOutArgument(scg:Dictionary(x:String, x:String))" />
+    <x:Property Name="in_Period" Type="InArgument(x:Int32)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="io_SystemError" Type="InOutArgument(s:Exception)" />
+    <x:Property Name="in_SLAChangeHistory" Type="InArgument(x:String)" />
+    <x:Property Name="in_LogsSLASheet" Type="InArgument(x:String)" />
+    <x:Property Name="io_BusinessRuleException" Type="InOutArgument(ui:BusinessRuleException)" />
+    <x:Property Name="in_TestMain" Type="InArgument(x:Boolean)" />
+    <x:Property Name="in_SendMails" Type="InArgument(x:Boolean)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1320,3792</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>QIWI.CommonFunctions.DateUtilities.Minutes</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Excel.Activities</x:String>
+      <x:String>UiPath.CSV.Activities</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>UiPath.CSV</x:String>
+      <x:String>UiPath.Mail.Activities</x:String>
+      <x:String>UiPath.Mail.Exchange.Activities</x:String>
+      <x:String>UiPath.Mail.IMAP.Activities</x:String>
+      <x:String>UiPath.Mail.Outlook.Activities</x:String>
+      <x:String>UiPath.Mail.POP3.Activities</x:String>
+      <x:String>UiPath.Mail.SMTP.Activities</x:String>
+      <x:String>UiPath.Orchestrator.Client</x:String>
+      <x:String>UiPath.Orchestrator.Client.Models</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.Web.Activities</x:String>
+      <x:String>UiPath.JSON.Activities</x:String>
+      <x:String>UiPath.REST.Activities</x:String>
+      <x:String>UiPath.SOAP.Activities</x:String>
+      <x:String>UiPath.XML.Activities</x:String>
+      <x:String>UiPath.Web</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>System.Globalization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>CommonFunctions</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Plugin.Workflow</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.OrchestratorClient</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Web</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <sap:WorkflowViewStateService.ViewState>
+    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+      <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+      <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+    </scg:Dictionary>
+  </sap:WorkflowViewStateService.ViewState>
+  <Sequence DisplayName="Process ticket change" sap:VirtualizedContainerService.HintSize="1280,3712" sap2010:WorkflowViewState.IdRef="Sequence_9">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Int32" Name="tempPeriod" />
+      <Variable x:TypeArguments="sd:DataTable" Name="tempDTForReport" />
+      <Variable x:TypeArguments="x:String" Name="resultTextToReport" />
+      <Variable x:TypeArguments="x:TimeSpan" Name="workDayEnd" />
+      <Variable x:TypeArguments="x:TimeSpan" Name="workDayStart" />
+      <Variable x:TypeArguments="s:DateTime" Name="startDateTime" />
+      <Variable x:TypeArguments="s:DateTime" Name="endDateTime" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Assign DisplayName="Prepare in_StartDate for calculation (set seconds to 0)" sap:VirtualizedContainerService.HintSize="1258,60" sap2010:WorkflowViewState.IdRef="Assign_17">
+      <Assign.To>
+        <OutArgument x:TypeArguments="s:DateTime">[in_StartDate]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="s:DateTime">[New DateTime(in_StartDate.Year, in_StartDate.Month, in_StartDate.Day, in_StartDate.Hour, in_StartDate.Minute, 0)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Prepare in_EndDate for calculation  (set seconds to 0)" sap:VirtualizedContainerService.HintSize="1258,60" sap2010:WorkflowViewState.IdRef="Assign_18">
+      <Assign.To>
+        <OutArgument x:TypeArguments="s:DateTime">[in_EndDate]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="s:DateTime">[New DateTime(in_EndDate.Year, in_EndDate.Month, in_EndDate.Day, in_EndDate.Hour, in_EndDate.Minute, 0)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign StartDateTime" sap:VirtualizedContainerService.HintSize="1258,60" sap2010:WorkflowViewState.IdRef="Assign_21">
+      <Assign.To>
+        <OutArgument x:TypeArguments="s:DateTime">[startDateTime]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="s:DateTime">[in_StartDate]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign StartDateTime" sap:VirtualizedContainerService.HintSize="1258,60" sap2010:WorkflowViewState.IdRef="Assign_22">
+      <Assign.To>
+        <OutArgument x:TypeArguments="s:DateTime">[endDateTime]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="s:DateTime">[in_EndDate]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <TryCatch DisplayName="If no workday for employee throw BusinessRuleException" sap:VirtualizedContainerService.HintSize="1258,947" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <TryCatch.Try>
+        <Sequence sap:VirtualizedContainerService.HintSize="264,284" sap2010:WorkflowViewState.IdRef="Sequence_13">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <Assign DisplayName="Assign WorkDayStart" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_23">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:TimeSpan">[workDayStart]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:TimeSpan">[TimeSpan.Parse(in_EmployeesWorkHoursDT.AsEnumerable().Where(Function(r) r("Name").ToString() = in_TicketData("Assignee")).Single()("WorkDayStart").ToString())]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign WorkDayEnd" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_24">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:TimeSpan">[workDayEnd]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:TimeSpan">[TimeSpan.Parse(in_EmployeesWorkHoursDT.AsEnumerable().Where(Function(r) r("Name").ToString() = in_TicketData("Assignee")).Single()("WorkDayEnd").ToString())]</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="404,353" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ActivityAction x:TypeArguments="s:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <Sequence sap:VirtualizedContainerService.HintSize="264,284" sap2010:WorkflowViewState.IdRef="Sequence_12">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <Assign DisplayName="Assign io_BusinessRuleException" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_25">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="ui:BusinessRuleException">[io_BusinessRuleException]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="ui:BusinessRuleException">[new BusinessRuleException(String.Format("Incorrect arguments. Check employee in WorkHoursDT:{0}Employee:{1}{0}StartDateTime:{2}{0}EndDateTime:{3}{0}WorkDayStart:{4}{0}WorkDayEnd:{5}", vbnewline, in_TicketData("Assignee"), in_StartDate, in_EndDate, WorkDayStart, workDayEnd))]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <Assign DisplayName="Assign Check" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_14">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[resultTextToReport]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">Employee work schedule not found</InArgument>
+                </Assign.Value>
+              </Assign>
+            </Sequence>
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+    <Sequence DisplayName="Sequence for calculating time period between dates" sap:VirtualizedContainerService.HintSize="1258,2201" sap2010:WorkflowViewState.IdRef="Sequence_11">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <w:CalculateMinutesBetweenDates BreakEnd="{x:Null}" BreakStart="{x:Null}" DisplayName="Calculate minutes between dates" EndDate="[endDateTime]" sap:VirtualizedContainerService.HintSize="1236,22" HolidaysList="[in_HolidaysList]" sap2010:WorkflowViewState.IdRef="CalculateMinutesBetweenDates_1" Minutes="[tempPeriod]" StartDate="[startDateTime]" WorkDayEnd="[workDayEnd]" WorkDayStart="[workDayStart]" />
+      <Assign DisplayName="Assign in_SLAChangeHistoryForEmail" sap:VirtualizedContainerService.HintSize="1236,64" sap2010:WorkflowViewState.IdRef="Assign_19">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[in_SLAChangeHistory]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String" xml:space="preserve">[in_SLAChangeHistory + String.Format("-&gt; {1} ({2}) = {3} мин.{0}", 
+vbnewline,
+in_EndDate.ToString("dd.MM.yyyy HH:mm:ss"),
+in_TicketData("NewValueToString"),
+tempPeriod)]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign DisplayName="Assign in_Period" sap:VirtualizedContainerService.HintSize="1236,60" sap2010:WorkflowViewState.IdRef="Assign_20">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:Int32">[in_Period]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:Int32">[in_Period + tempPeriod]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <ui:BuildDataTable DataTable="[tempDTForReport]" DisplayName="Build Data Table TempDTForReport" sap:VirtualizedContainerService.HintSize="1236,59" sap2010:WorkflowViewState.IdRef="BuildDataTable_4" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;              &lt;xs:sequence&gt;&#xA;                &lt;xs:element name=&quot;DateProcessed&quot; type=&quot;xs:dateTime&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;TicketID&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;TicketLink&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Assignee&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;FirstDate&quot; type=&quot;xs:dateTime&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;SecondDate&quot; type=&quot;xs:dateTime&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Period&quot; type=&quot;xs:int&quot; minOccurs=&quot;0&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Check&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;              &lt;/xs:sequence&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;" />
+      <If Condition="[in_EndDate &lt; Now.AddDays(-CInt(in_Config(&quot;DaysToFilter&quot;)))]" DisplayName="If processing date is later than audit period" sap:VirtualizedContainerService.HintSize="1236,1712" sap2010:WorkflowViewState.IdRef="If_6">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <If.Else>
+          <Sequence sap:VirtualizedContainerService.HintSize="1111,1564" sap2010:WorkflowViewState.IdRef="Sequence_14">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <If Condition="[in_Period &lt; in_SLAPeriod]" DisplayName="If in_Period &lt; in_SLAPeriod" sap:VirtualizedContainerService.HintSize="1089,1068" sap2010:WorkflowViewState.IdRef="If_5">
+              <If.Then>
+                <Assign DisplayName="Assign Check" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_26">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[resultTextToReport]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">["OK"]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </If.Then>
+              <If.Else>
+                <Sequence sap:VirtualizedContainerService.HintSize="822,920" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Assign DisplayName="Assign Check" sap:VirtualizedContainerService.HintSize="800,60" sap2010:WorkflowViewState.IdRef="Assign_15">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:String">[resultTextToReport]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:String">FAILED</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <If Condition="[in_SendMails]" DisplayName="If in_SendMails" sap:VirtualizedContainerService.HintSize="800,696" sap2010:WorkflowViewState.IdRef="If_8">
+                    <If.Then>
+                      <Sequence sap:VirtualizedContainerService.HintSize="675,548" sap2010:WorkflowViewState.IdRef="Sequence_16">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <If Condition="[in_TestMain]" DisplayName="If in_TestMain don't send mail to assignee" sap:VirtualizedContainerService.HintSize="653,293" sap2010:WorkflowViewState.IdRef="If_7">
+                          <If.Then>
+                            <ui:SendMail Bcc="{x:Null}" Email="{x:Null}" MailMessage="{x:Null}" Password="{x:Null}" TimeoutMS="{x:Null}" Body="[String.Format(in_MailBody, vbnewline, in_TicketData(&quot;TicketID&quot;), in_TicketData(&quot;TicketLink&quot;), in_SLAChangeHistory)]" Cc="[in_Config(&quot;OulookAccountSupport&quot;).ToString]" DisplayName="Send SMTP Mail Message" EnableSSL="True" From="[in_Config(&quot;OulookAccountRobot&quot;).ToString]" sap:VirtualizedContainerService.HintSize="314,145" sap2010:WorkflowViewState.IdRef="SendMail_2" IsBodyHtml="False" Name="[in_Config(&quot;logF_BusinessProcessName&quot;).ToString]" Port="[CInt(in_Config(&quot;OulookSMTPPort&quot;))]" SecureConnection="None" Server="[in_Config(&quot;OulookSMTPServer&quot;).ToString]" Subject="[String.Format(in_MailSubject, in_TicketData(&quot;TicketID&quot;), in_Period)]" To="[in_Config(&quot;OulookAccountSupport&quot;).ToString]">
+                              <ui:SendMail.Files>
+                                <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                              </ui:SendMail.Files>
+                            </ui:SendMail>
+                          </If.Then>
+                          <If.Else>
+                            <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" Email="{x:Null}" MailMessage="{x:Null}" Password="{x:Null}" TimeoutMS="{x:Null}" Body="[String.Format(in_MailBody, vbnewline, in_TicketData(&quot;TicketID&quot;), in_TicketData(&quot;TicketLink&quot;), in_SLAChangeHistory)]" DisplayName="Send SMTP Mail Message" EnableSSL="True" From="[in_Config(&quot;OulookAccountRobot&quot;).ToString]" sap:VirtualizedContainerService.HintSize="314,145" sap2010:WorkflowViewState.IdRef="SendMail_1" IsBodyHtml="False" Name="[in_Config(&quot;logF_BusinessProcessName&quot;).ToString]" Port="[CInt(in_Config(&quot;OulookSMTPPort&quot;))]" SecureConnection="None" Server="[in_Config(&quot;OulookSMTPServer&quot;).ToString]" Subject="[String.Format(in_MailSubject, in_TicketData(&quot;TicketID&quot;), in_Period)]" To="[String.Format(&quot;{0}@{1}&quot;, in_TicketData(&quot;Assignee&quot;), in_Config(&quot;CompanyDomain&quot;))]">
+                              <ui:SendMail.Files>
+                                <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                              </ui:SendMail.Files>
+                            </ui:SendMail>
+                          </If.Else>
+                        </If>
+                        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="653,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Warn" Message="[&quot;Sent SLA FAIL MAIL &quot; + in_TicketData(&quot;TicketID&quot;).ToString]" />
+                      </Sequence>
+                    </If.Then>
+                  </If>
+                </Sequence>
+              </If.Else>
+            </If>
+            <ui:AddDataRow DataRow="{x:Null}" ArrayRow="[{Now, in_TicketData(&quot;TicketID&quot;), in_TicketData(&quot;TicketLink&quot;), in_TicketData(&quot;Assignee&quot;), in_StartDate, in_EndDate, in_Period, resultTextToReport}]" DataTable="[tempDTForReport]" DisplayName="Add Data Row to Report" sap:VirtualizedContainerService.HintSize="1089,22" sap2010:WorkflowViewState.IdRef="AddDataRow_6" />
+            <ui:AppendRange DataTable="[tempDTForReport]" DisplayName="Append Range to Logs SLA" sap:VirtualizedContainerService.HintSize="1089,115" sap2010:WorkflowViewState.IdRef="AppendRange_4" SheetName="[in_LogsSLASheet]" WorkbookPath="[Path.Combine(in_Config(&quot;InputFolder&quot;).ToString, in_Config(&quot;LogsFileName&quot;).ToString)]" />
+            <ui:AppendRange DataTable="[tempDTForReport]" DisplayName="Append Range to SLA Report" sap:VirtualizedContainerService.HintSize="1089,115" sap2010:WorkflowViewState.IdRef="AppendRange_3" SheetName="[in_LogsSLASheet]" WorkbookPath="[Path.Combine(in_Config(&quot;OutputFolder&quot;).ToString, in_Config(&quot;ReportFileName&quot;).ToString)]" />
+          </Sequence>
+        </If.Else>
+      </If>
+    </Sequence>
+  </Sequence>
+</Activity>
